@@ -75,3 +75,10 @@ For simplicity, we ignore correlation, such that:
 $$
 v_{\mathrm{exc}}(x) = v_{X}^{\mathrm{LDA}}(x).
 $$
+
+# Running code
+
+Simply download and enter number of electrons and size of grid to retrieve energies and density plots.
+
+ - grid size ~200 works well.
+   
