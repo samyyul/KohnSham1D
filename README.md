@@ -81,4 +81,9 @@ $$
 Simply download and enter number of electrons and size of grid to retrieve energies and density plots.
 
  - grid size ~200 works well.
-   
+
+# example plots
+<img width="576" height="455" alt="image" src="https://github.com/user-attachments/assets/54276872-97eb-47f2-8253-072d392f3581" />
+<img width="554" height="455" alt="image" src="https://github.com/user-attachments/assets/ff93f2b0-3765-498a-93c4-b7492d49f5ee" />
+
+
