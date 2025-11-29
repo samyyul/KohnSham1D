@@ -21,7 +21,8 @@ def get_user_inputs():
     """Ask for number of electrons and grid points, return them as ints."""
     n_electrons = int(get_input("Enter number of electrons", "2"))
     grid_points = int(get_input("Enter number of grid points", "200"))
-    return n_electrons, grid_points
+    Nshow = int(get_input("Number of energy levels to show", "6"))
+    return n_electrons, grid_points, Nshow
 
 
 # =========================
@@ -211,7 +212,7 @@ def self_consistent_loop(n_electrons, x, T_hat, max_iter=100, tol=1e-6):
 # =========================
 
 def run_ks_scf():
-    n_electrons, grid_points = get_user_inputs()
+    n_electrons, grid_points, NShow = get_user_inputs()
     x = build_grid(grid_points)
     D, D2, T_hat = build_derivative_matrices(x)
 
@@ -223,7 +224,7 @@ def run_ks_scf():
     # plt.legend()
     # plt.show()
 
-    # Free-particle spectrum (kinetic only) if you want it:
+    # Free-particle spectrum (kinetic only):
     eig_free, psi_free = np.linalg.eigh(T_hat)
 
     # Harmonic oscillator without interaction
@@ -243,20 +244,33 @@ def run_ks_scf():
     # Compare densities: SCF vs non-interacting HO
     rho_harm = density(psi_harm, n_electrons, x)
 
-    plt.plot(x, rho_scf, label="SCF density")
-    plt.plot(x, rho_harm, label="harmonic (no interaction)")
+    plt.plot(x, rho_scf, label="SCF density", color = "blue" )
+    plt.plot(x, rho_harm, label="harmonic (no interaction)", color = "red")
     plt.legend()
     plt.xlabel("x")
     plt.ylabel("n(x)")
+    plt.title("Electron Densities, %d electrons" % n_electrons)
     plt.show()
 
-    # Plot KS eigenvalues
-    plt.plot(eig_scf, marker="o", linestyle="", label="KS eigenvalues")
-    plt.legend()
-    plt.xlabel("orbital index")
-    plt.ylabel("ε_n")
+    # Plot KS eigenvalues vs harmonic oscillator
+    def plot_levels(levels, label, color):
+        for n, E in enumerate(levels):
+            plt.hlines(E, n-0.3, n+0.3, color=color)
+            plt.text(n, E + 0.1, f"{label}{n}", ha='center')
+
+    plt.figure()
+    plot_levels(eig_harm[:NShow], "HO", "blue")
+    plot_levels(eig_scf[:NShow], "KS", "red")
+    plt.plot([], [], color="red", label="Kohn-Sham SCF")
+    plt.plot([], [], color="blue", label="Harmonic Oscillator")
+    plt.legend(loc="upper left")
+    plt.xlabel("eigenvalue index n = ")
+    plt.ylabel("Energy ε_n")
+    plt.title("Energy level diagram for %d electrons" % n_electrons)
     plt.show()
 
 
 if __name__ == "__main__":
     run_ks_scf()
+
+    #%%%
